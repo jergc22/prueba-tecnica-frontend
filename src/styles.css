@@ -274,3 +274,50 @@ body {
 .feedback--error {
   color: #b91c1c;
 }
+
+.header__inner {
+  gap: 1rem;
+}
+
+.breadcrumbs {
+  flex: 1;
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+
+.breadcrumbs ol {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.breadcrumbs li + li::before {
+  content: '›';
+  margin-right: 0.4rem;
+}
+
+.breadcrumbs a {
+  color: inherit;
+}
+
+@media (max-width: 600px) {
+  .header__inner {
+    flex-wrap: wrap;
+  }
+
+  .breadcrumbs {
+    order: 3;
+    flex-basis: 100%;
+  }
+
+  .toolbar {
+    justify-content: stretch;
+  }
+
+  .search {
+    max-width: none;
+  }
+}
