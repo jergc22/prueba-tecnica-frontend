@@ -40,6 +40,22 @@ body {
   cursor: pointer;
 }
 
+.toolbar {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: var(--gap);
+}
+
+.search {
+  width: 100%;
+  max-width: 320px;
+  padding: 0.55rem 0.8rem;
+  font: inherit;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: #fff;
+}
+
 /* Máximo 4 columnas: cada columna mide como mínimo 220px y nunca menos de un cuarto del ancho. */
 .grid {
   --min: max(220px, calc((100% - 3 * var(--gap)) / 4));
