@@ -7,10 +7,10 @@ export function Loading({ message = 'Cargando…' }) {
   )
 }
 
-export function ErrorMessage({ onRetry }) {
+export function ErrorMessage({ message = 'No se han podido cargar los datos.', onRetry }) {
   return (
     <div className="state state--error" role="alert">
-      <p>No se han podido cargar los datos.</p>
+      <p>{message}</p>
       <button type="button" onClick={onRetry}>
         Reintentar
       </button>

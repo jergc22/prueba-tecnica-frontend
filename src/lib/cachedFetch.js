@@ -29,6 +29,7 @@ export async function cachedFetch(
 ) {
   const entry = readEntry(storage, key)
   if (entry && now() - entry.timestamp < ttl) return entry.data
+  if (entry) storage.removeItem(PREFIX + key)
 
   if (inFlight.has(key)) return inFlight.get(key)
 

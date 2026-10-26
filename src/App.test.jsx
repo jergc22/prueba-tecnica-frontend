@@ -62,6 +62,13 @@ describe('App', () => {
     expect(screen.getByTestId('cart-count')).toHaveTextContent('1')
   })
 
+  it('muestra un aviso en una ruta que no existe', () => {
+    window.history.pushState({}, '', '/no-existe')
+    render(<App />)
+
+    expect(screen.getByText('Página no encontrada.')).toBeInTheDocument()
+  })
+
   it('vuelve al listado conservando la búsqueda', async () => {
     const user = userEvent.setup()
     window.history.pushState({}, '', '/?q=acer')

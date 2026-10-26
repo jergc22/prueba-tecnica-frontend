@@ -7,7 +7,8 @@ const EMPTY = ''
 function toText(value) {
   if (Array.isArray(value)) return value.filter(Boolean).join(', ')
   if (value === null || value === undefined) return EMPTY
-  return String(value).trim()
+  const text = String(value).trim()
+  return text === '-' ? EMPTY : text
 }
 
 export function toPrice(value) {

@@ -56,6 +56,21 @@ describe('cachedFetch', () => {
     expect(JSON.parse(storage.getItem('cache:k3')).timestamp).toBe(ONE_HOUR)
   })
 
+  it('elimina la entrada caducada si la nueva petición falla', async () => {
+    const fetchFn = vi
+      .fn()
+      .mockResolvedValueOnce(okResponse({ a: 1 }))
+      .mockResolvedValueOnce({ ok: false, status: 500, json: () => Promise.resolve({}) })
+    const storage = createStorage()
+    let time = 0
+
+    await cachedFetch('k7', '/url', { fetchFn, storage, now: () => time })
+    time = ONE_HOUR
+    await expect(cachedFetch('k7', '/url', { fetchFn, storage, now: () => time })).rejects.toThrow()
+
+    expect(storage.getItem('cache:k7')).toBeNull()
+  })
+
   it('no guarda las respuestas con error', async () => {
     const fetchFn = vi.fn().mockResolvedValue({ ok: false, status: 500, json: () => Promise.resolve({}) })
     const storage = createStorage()

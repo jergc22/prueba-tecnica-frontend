@@ -9,7 +9,7 @@ export default [
     files: ['**/*.{js,jsx}'],
     languageOptions: {
       ecmaVersion: 2022,
-      globals: { ...globals.browser, ...globals.node },
+      globals: globals.browser,
       parserOptions: { ecmaFeatures: { jsx: true }, sourceType: 'module' },
     },
     plugins: { 'react-hooks': reactHooks, 'react-refresh': reactRefresh },
@@ -19,6 +19,10 @@ export default [
       'no-unused-vars': ['error', { varsIgnorePattern: '^[A-Z_]' }],
       'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
     },
+  },
+  {
+    files: ['*.config.js'],
+    languageOptions: { globals: globals.node },
   },
   {
     files: ['**/*.test.{js,jsx}', 'src/test/**'],

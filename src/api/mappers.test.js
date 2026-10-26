@@ -81,6 +81,10 @@ describe('mapProductDetail', () => {
     expect(mapProductDetail({ ...rawDetail, cpu: ['Hexa-core', '4x1.4 GHz'] }).cpu).toBe('Hexa-core, 4x1.4 GHz')
   })
 
+  it('trata un guion como valor vacío', () => {
+    expect(mapProductDetail({ ...rawDetail, dimentions: '-' }).dimensions).toBe('')
+  })
+
   it('deja el precio a null si viene vacío', () => {
     expect(mapProductDetail({ ...rawDetail, price: '' }).price).toBeNull()
   })
