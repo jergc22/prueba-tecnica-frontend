@@ -22,6 +22,15 @@ export const safeStorage = {
     }
   },
 
+  clear() {
+    memory.clear()
+    try {
+      window.localStorage.clear()
+    } catch {
+      // nada que hacer
+    }
+  },
+
   removeItem(key) {
     memory.delete(key)
     try {
