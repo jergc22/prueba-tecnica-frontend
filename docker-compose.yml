@@ -1,0 +1,6 @@
+name: mobile-store
+services:
+  web:
+    build: .
+    ports:
+      - "8080:80"
