@@ -23,7 +23,7 @@ El API está en un plan gratuito de Render. Si lleva un rato sin uso, la primera
 
 ### Scripts
 
-Con Node 22+:
+Con Node 22.22+ o 24.15+ (lo exigen Vitest y jsdom; hay un `.nvmrc` para `nvm use`):
 
 ```bash
 npm ci          # instalar dependencias

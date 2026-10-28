@@ -5,7 +5,7 @@ help:
 	@echo "make logs         muestra los logs del contenedor"
 	@echo "make down         para y elimina el contenedor"
 	@echo "make test-docker  pasa el lint y los tests dentro de Docker (no necesita Node)"
-	@echo "make install      instala las dependencias en local (Node 22+)"
+	@echo "make install      instala las dependencias en local (Node 22.22+ o 24.15+)"
 	@echo "make start        arranca el servidor de desarrollo en local"
 	@echo "make test         ejecuta los tests en local"
 	@echo "make lint         pasa el linter en local"
