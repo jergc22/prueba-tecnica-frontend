@@ -29,21 +29,33 @@ export default function ProductActions({ colors, storages, onAdd, adding = false
   const [storageCode, setStorageCode] = useState(() => initialSelection(storages))
   const [colorCode, setColorCode] = useState(() => initialSelection(colors))
 
-  const canAdd = storageCode !== null && colorCode !== null && !adding
+  const selectionComplete = storageCode !== null && colorCode !== null
 
   return (
     <form
       className="actions"
       onSubmit={(event) => {
         event.preventDefault()
-        if (canAdd) onAdd({ colorCode, storageCode })
+        if (selectionComplete && !adding) onAdd({ colorCode, storageCode })
       }}
     >
       <OptionGroup legend="Almacenamiento" name="storage" options={storages} selected={storageCode} onSelect={setStorageCode} />
       <OptionGroup legend="Color" name="color" options={colors} selected={colorCode} onSelect={setColorCode} />
-      <button type="submit" className="actions__add" disabled={!canAdd}>
+      {/* Mientras se añade se usa aria-disabled y no disabled: un botón disabled pierde el foco del teclado. */}
+      <button
+        type="submit"
+        className="actions__add"
+        disabled={!selectionComplete}
+        aria-disabled={adding || undefined}
+        aria-describedby={selectionComplete ? undefined : 'actions-hint'}
+      >
         {adding ? 'Añadiendo…' : 'Añadir'}
       </button>
+      {!selectionComplete && (
+        <p id="actions-hint" className="actions__hint">
+          Elige almacenamiento y color para añadir el producto.
+        </p>
+      )}
     </form>
   )
 }

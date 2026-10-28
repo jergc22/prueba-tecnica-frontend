@@ -81,6 +81,15 @@ describe('mapProductDetail', () => {
     expect(mapProductDetail({ ...rawDetail, cpu: ['Hexa-core', '4x1.4 GHz'] }).cpu).toBe('Hexa-core, 4x1.4 GHz')
   })
 
+  it('decodifica las entidades HTML que trae algún texto', () => {
+    expect(mapProductDetail({ ...rawDetail, os: ['Android 6.0', 'upgrad&#1072;ble'] }).os).toBe('Android 6.0, upgrad\u0430ble')
+    expect(mapProductDetail({ ...rawDetail, cpu: 'A &amp; B' }).cpu).toBe('A & B')
+  })
+
+  it('pone en mayúscula la inicial de la marca', () => {
+    expect(mapProductSummary({ ...rawDetail, brand: 'alcatel' }).brand).toBe('Alcatel')
+  })
+
   it('trata un guion como valor vacío', () => {
     expect(mapProductDetail({ ...rawDetail, dimentions: '-' }).dimensions).toBe('')
   })

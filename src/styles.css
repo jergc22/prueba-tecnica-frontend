@@ -59,7 +59,8 @@ body {
 
 /* Máximo 4 columnas: cada columna mide como mínimo 220px y nunca menos de un cuarto del ancho. */
 .grid {
-  --min: max(220px, calc((100% - 3 * var(--gap)) / 4));
+  /* En móvil la columna mínima baja a la mitad del ancho para que quepan dos. */
+  --min: max(min(220px, calc((100% - var(--gap)) / 2)), calc((100% - 3 * var(--gap)) / 4));
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(var(--min), 1fr));
   gap: var(--gap);
@@ -141,10 +142,12 @@ body {
 }
 
 .product-image img {
-  aspect-ratio: 1;
+  /* Las imágenes del API miden ~160x212: más grandes se verían borrosas. */
   display: block;
   width: 100%;
-  max-height: 480px;
+  max-width: 320px;
+  aspect-ratio: 160 / 212;
+  margin: 0 auto;
   object-fit: contain;
 }
 
@@ -327,4 +330,15 @@ body {
 .detail__title {
   margin: 0 0 var(--gap);
   font-size: 1.5rem;
+}
+
+.actions__hint {
+  margin: -0.5rem 0 0;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.actions__add[aria-disabled='true'] {
+  opacity: 0.6;
+  cursor: progress;
 }

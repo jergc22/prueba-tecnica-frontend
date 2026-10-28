@@ -1,3 +1,4 @@
 import { createContext } from 'react'
 
-export const CartContext = createContext({ count: 0, addItem: async () => {} })
+// Sin valor por defecto: usar el carrito fuera de CartProvider es un error de programación.
+export const CartContext = createContext(null)

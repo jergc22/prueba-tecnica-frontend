@@ -25,8 +25,26 @@ describe('ProductActions', () => {
     expect(screen.getByRole('radio', { name: '16 GB' })).not.toBeChecked()
     expect(screen.getByRole('button', { name: 'Añadir' })).toBeDisabled()
 
+    expect(screen.getByText(/elige almacenamiento y color/i)).toBeInTheDocument()
+
     await user.click(screen.getByRole('radio', { name: '32 GB' }))
     expect(screen.getByRole('button', { name: 'Añadir' })).toBeEnabled()
+    expect(screen.queryByText(/elige almacenamiento y color/i)).not.toBeInTheDocument()
+  })
+
+  it('mientras se añade no envía de nuevo pero conserva el foco en el botón', async () => {
+    const user = userEvent.setup()
+    const onAdd = vi.fn()
+    render(<ProductActions colors={oneColor} storages={[{ code: 2000, name: '16 GB' }]} onAdd={onAdd} adding />)
+    const button = screen.getByRole('button', { name: 'Añadiendo…' })
+
+    button.focus()
+    await user.click(button)
+
+    expect(onAdd).not.toHaveBeenCalled()
+    expect(button).toBeEnabled()
+    expect(button).toHaveAttribute('aria-disabled', 'true')
+    expect(button).toHaveFocus()
   })
 
   it('envía los códigos seleccionados al añadir', async () => {

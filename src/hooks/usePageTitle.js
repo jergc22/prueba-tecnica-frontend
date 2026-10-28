@@ -1,9 +1,13 @@
-import { useEffect } from 'react'
+import { useEffect, useSyncExternalStore } from 'react'
+import { pageTitle } from '../lib/pageTitle.js'
 
-const BASE_TITLE = 'Tienda de móviles'
-
+/** Publica el título de la página actual (pestaña del navegador y breadcrumb). */
 export function usePageTitle(title) {
   useEffect(() => {
-    document.title = title ? `${title} · ${BASE_TITLE}` : BASE_TITLE
+    pageTitle.set(title)
   }, [title])
+}
+
+export function useCurrentPageTitle() {
+  return useSyncExternalStore(pageTitle.subscribe, pageTitle.get)
 }

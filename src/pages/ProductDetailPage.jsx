@@ -50,7 +50,7 @@ function ProductDetail({ id }) {
       </Link>
 
       {loading && <Loading message="Cargando producto…" />}
-      {error && <ErrorMessage message="No se ha podido cargar el producto. Puede que no exista." onRetry={reload} />}
+      {error && <ErrorMessage message="No se ha podido cargar el producto." onRetry={reload} />}
       {product && (
         <div className="detail">
           <ProductImage product={product} />
@@ -60,8 +60,12 @@ function ProductDetail({ id }) {
             </h1>
             <ProductDescription product={product} />
             <ProductActions colors={product.colors} storages={product.storages} onAdd={handleAdd} adding={cartStatus.adding} />
-            {cartStatus.message && (
-              <p className={cartStatus.failed ? 'feedback feedback--error' : 'feedback'} role={cartStatus.failed ? 'alert' : 'status'}>
+            {/* La región live existe siempre: así los lectores de pantalla anuncian el mensaje al rellenarse. */}
+            <p className="feedback" role="status">
+              {!cartStatus.failed && cartStatus.message}
+            </p>
+            {cartStatus.failed && (
+              <p className="feedback feedback--error" role="alert">
                 {cartStatus.message}
               </p>
             )}

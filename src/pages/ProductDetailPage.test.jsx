@@ -62,7 +62,7 @@ describe('ProductDetailPage', () => {
     fetchProduct.mockRejectedValueOnce(new Error('500')).mockResolvedValueOnce(product)
     renderDetail()
 
-    expect(await screen.findByRole('alert')).toHaveTextContent(/puede que no exista/i)
+    expect(await screen.findByRole('alert')).toHaveTextContent(/no se ha podido cargar el producto/i)
 
     await user.click(screen.getByRole('button', { name: 'Reintentar' }))
 

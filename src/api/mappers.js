@@ -3,12 +3,29 @@
 // unas veces llegan como string y otras como array. Aquí se traduce todo a un modelo propio.
 
 const EMPTY = ''
+const NAMED_ENTITIES = { amp: '&', lt: '<', gt: '>', quot: '"', apos: "'", nbsp: ' ' }
+
+// Algún texto llega con entidades HTML literales (p. ej. "upgrad&#1072;ble").
+function decodeEntities(text) {
+  return text.replace(/&(#x[0-9a-f]+|#\d+|[a-z]+);/gi, (match, code) => {
+    if (code[0] === '#') {
+      const number = code[1].toLowerCase() === 'x' ? parseInt(code.slice(2), 16) : Number(code.slice(1))
+      return Number.isFinite(number) ? String.fromCodePoint(number) : match
+    }
+    return NAMED_ENTITIES[code.toLowerCase()] ?? match
+  })
+}
 
 function toText(value) {
-  if (Array.isArray(value)) return value.filter(Boolean).join(', ')
+  if (Array.isArray(value)) return value.map(toText).filter(Boolean).join(', ')
   if (value === null || value === undefined) return EMPTY
-  const text = String(value).trim()
+  const text = decodeEntities(String(value).trim())
   return text === '-' ? EMPTY : text
+}
+
+// El API trae alguna marca en minúsculas ("alcatel").
+function capitalize(text) {
+  return text.charAt(0).toUpperCase() + text.slice(1)
 }
 
 export function toPrice(value) {
@@ -31,7 +48,7 @@ function splitDisplay(a, b) {
 export function mapProductSummary(raw) {
   return {
     id: raw.id,
-    brand: toText(raw.brand),
+    brand: capitalize(toText(raw.brand)),
     model: toText(raw.model),
     price: toPrice(raw.price),
     imgUrl: raw.imgUrl,

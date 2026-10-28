@@ -71,6 +71,27 @@ describe('cachedFetch', () => {
     expect(storage.getItem('cache:k7')).toBeNull()
   })
 
+  it('no da por válida una entrada con marca de tiempo en el futuro', async () => {
+    const fetchFn = vi.fn().mockResolvedValue(okResponse({ fresh: true }))
+    const storage = createStorage()
+    storage.setItem('cache:k8', JSON.stringify({ timestamp: 10 * ONE_HOUR, data: { stale: true } }))
+
+    const data = await cachedFetch('k8', '/url', { fetchFn, storage, now: () => 0 })
+
+    expect(data).toEqual({ fresh: true })
+    expect(fetchFn).toHaveBeenCalledTimes(1)
+  })
+
+  it('ignora una entrada sin datos', async () => {
+    const fetchFn = vi.fn().mockResolvedValue(okResponse([1, 2]))
+    const storage = createStorage()
+    storage.setItem('cache:k9', JSON.stringify({ timestamp: 0 }))
+
+    const data = await cachedFetch('k9', '/url', { fetchFn, storage, now: () => 1 })
+
+    expect(data).toEqual([1, 2])
+  })
+
   it('no guarda las respuestas con error', async () => {
     const fetchFn = vi.fn().mockResolvedValue({ ok: false, status: 500, json: () => Promise.resolve({}) })
     const storage = createStorage()

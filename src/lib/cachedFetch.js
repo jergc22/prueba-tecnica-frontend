@@ -11,7 +11,7 @@ function readEntry(storage, key) {
   if (!raw) return null
   try {
     const entry = JSON.parse(raw)
-    return typeof entry?.timestamp === 'number' ? entry : null
+    return typeof entry?.timestamp === 'number' && 'data' in entry ? entry : null
   } catch {
     return null
   }
@@ -28,7 +28,9 @@ export async function cachedFetch(
   { ttl = ONE_HOUR, storage = safeStorage, now = Date.now, fetchFn = (...args) => fetch(...args) } = {},
 ) {
   const entry = readEntry(storage, key)
-  if (entry && now() - entry.timestamp < ttl) return entry.data
+  // age >= 0: una marca de tiempo en el futuro (reloj cambiado) no se da por válida.
+  const age = entry ? now() - entry.timestamp : -1
+  if (entry && age >= 0 && age < ttl) return entry.data
   if (entry) storage.removeItem(PREFIX + key)
 
   if (inFlight.has(key)) return inFlight.get(key)

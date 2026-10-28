@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react'
+import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { addToCart } from '../api/cart.js'
@@ -43,7 +43,8 @@ describe('CartProvider', () => {
     await user.click(screen.getByRole('button', { name: 'añadir' }))
 
     expect(addToCart).toHaveBeenCalledWith({ id: 'p1', colorCode: 1000, storageCode: 2000 })
-    expect(await screen.findByText('3')).toBeInTheDocument()
+    await waitFor(() => expect(screen.getByTestId('cart-count')).toHaveTextContent('3'))
+    expect(localStorage.getItem('cart:count')).toBe('3')
   })
 
   it('persiste el contador entre recargas', async () => {
@@ -51,12 +52,25 @@ describe('CartProvider', () => {
     const user = userEvent.setup()
     const first = renderApp()
     await user.click(screen.getByRole('button', { name: 'añadir' }))
-    await screen.findByText('2')
+    await waitFor(() => expect(screen.getByTestId('cart-count')).toHaveTextContent('2'))
     first.unmount()
 
     renderApp()
 
     expect(screen.getByTestId('cart-count')).toHaveTextContent('2')
+  })
+
+  it('ignora un valor inválido guardado', () => {
+    localStorage.setItem('cart:count', 'abc')
+    renderApp()
+
+    expect(screen.getByTestId('cart-count')).toHaveTextContent('0')
+  })
+
+  it('falla de forma explícita si se usa fuera del provider', () => {
+    vi.spyOn(console, 'error').mockImplementation(() => {})
+
+    expect(() => render(<AddButton />)).toThrow(/CartProvider/)
   })
 
   it('no cambia el contador si el API falla', async () => {
