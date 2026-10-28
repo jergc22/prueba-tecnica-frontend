@@ -67,6 +67,7 @@ describe('App', () => {
     render(<App />)
 
     expect(screen.getByText('Página no encontrada.')).toBeInTheDocument()
+    expect(document.title).toBe('Página no encontrada · Tienda de móviles')
   })
 
   it('vuelve al listado conservando la búsqueda', async () => {

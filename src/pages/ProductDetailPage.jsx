@@ -59,7 +59,13 @@ function ProductDetail({ id }) {
               {product.brand} {product.model}
             </h1>
             <ProductDescription product={product} />
-            <ProductActions colors={product.colors} storages={product.storages} onAdd={handleAdd} adding={cartStatus.adding} />
+            <ProductActions
+              colors={product.colors}
+              storages={product.storages}
+              purchasable={product.price !== null}
+              onAdd={handleAdd}
+              adding={cartStatus.adding}
+            />
             {/* La región live existe siempre: así los lectores de pantalla anuncian el mensaje al rellenarse. */}
             <p className="feedback" role="status">
               {!cartStatus.failed && cartStatus.message}

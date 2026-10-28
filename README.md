@@ -7,6 +7,8 @@ SPA en React para comprar dispositivos móviles. Tiene dos vistas:
 
 Consume el API de `https://itx-frontend-test.onrender.com`.
 
+Es la prueba de frontend del proceso. La de backend es otra prueba independiente y está en [prueba-tecnica-backend](https://github.com/jergc22/prueba-tecnica-backend).
+
 ## Arranque rápido
 
 Solo hace falta Docker (y `make`):
@@ -93,6 +95,7 @@ El filtro busca todas las palabras escritas en "marca modelo", sin distinguir ma
 ### Detalle
 
 - Los selectores de almacenamiento y color son radios estilizados, así que se usan con teclado. Si solo hay una opción, se muestra seleccionada. Si hay varias, el botón "Añadir" explica que hay que elegir.
+- Los productos sin precio (6 en el API) no se pueden añadir: no tiene sentido vender algo sin precio, y el botón lo explica. Lo mismo si un producto no trae opciones de color o almacenamiento.
 - Mientras se añade, el botón no pierde el foco. Si el API falla, se muestra un error y el contador no cambia.
 - "Volver al listado" retrocede en el historial si se llegó desde la aplicación, con lo que se recuperan la búsqueda y el scroll. Con acceso directo a la URL, lleva al listado.
 
@@ -105,7 +108,7 @@ El filtro busca todas las palabras escritas en "marca modelo", sin distinguir ma
 
 ## Tests
 
-53 tests:
+55 tests:
 
 - Caché con tiempo simulado: expiración a la hora, errores, entradas corruptas o del futuro y peticiones simultáneas.
 - Mappers con las particularidades del API.

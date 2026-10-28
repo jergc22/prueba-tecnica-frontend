@@ -47,6 +47,21 @@ describe('ProductActions', () => {
     expect(button).toHaveFocus()
   })
 
+  it('explica que no se puede añadir si el producto no trae opciones', () => {
+    render(<ProductActions colors={[]} storages={[{ code: 2000, name: '16 GB' }]} onAdd={() => {}} />)
+
+    expect(screen.getByRole('button', { name: 'Añadir' })).toBeDisabled()
+    expect(screen.getByText(/no está disponible para la venta/i)).toBeInTheDocument()
+  })
+
+  it('no deja añadir un producto que no se puede vender (sin precio)', () => {
+    render(<ProductActions colors={oneColor} storages={[{ code: 2000, name: '16 GB' }]} purchasable={false} onAdd={() => {}} />)
+
+    expect(screen.getByRole('radio', { name: 'Black' })).toBeChecked()
+    expect(screen.getByRole('button', { name: 'Añadir' })).toBeDisabled()
+    expect(screen.getByText(/no está disponible para la venta/i)).toBeInTheDocument()
+  })
+
   it('envía los códigos seleccionados al añadir', async () => {
     const user = userEvent.setup()
     const onAdd = vi.fn()

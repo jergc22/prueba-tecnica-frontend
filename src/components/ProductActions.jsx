@@ -25,18 +25,24 @@ function OptionGroup({ legend, name, options, selected, onSelect }) {
   )
 }
 
-export default function ProductActions({ colors, storages, onAdd, adding = false }) {
+export default function ProductActions({ colors, storages, onAdd, adding = false, purchasable = true }) {
   const [storageCode, setStorageCode] = useState(() => initialSelection(storages))
   const [colorCode, setColorCode] = useState(() => initialSelection(colors))
 
+  // Sin precio no se vende; sin opciones de color o almacenamiento no hay códigos que enviar.
+  const available = purchasable && colors.length > 0 && storages.length > 0
   const selectionComplete = storageCode !== null && colorCode !== null
+  const canAdd = available && selectionComplete
+  const hint = available
+    ? 'Elige almacenamiento y color para añadir el producto.'
+    : 'Este producto no está disponible para la venta.'
 
   return (
     <form
       className="actions"
       onSubmit={(event) => {
         event.preventDefault()
-        if (selectionComplete && !adding) onAdd({ colorCode, storageCode })
+        if (canAdd && !adding) onAdd({ colorCode, storageCode })
       }}
     >
       <OptionGroup legend="Almacenamiento" name="storage" options={storages} selected={storageCode} onSelect={setStorageCode} />
@@ -45,15 +51,15 @@ export default function ProductActions({ colors, storages, onAdd, adding = false
       <button
         type="submit"
         className="actions__add"
-        disabled={!selectionComplete}
+        disabled={!canAdd}
         aria-disabled={adding || undefined}
-        aria-describedby={selectionComplete ? undefined : 'actions-hint'}
+        aria-describedby={canAdd ? undefined : 'actions-hint'}
       >
         {adding ? 'Añadiendo…' : 'Añadir'}
       </button>
-      {!selectionComplete && (
+      {!canAdd && (
         <p id="actions-hint" className="actions__hint">
-          Elige almacenamiento y color para añadir el producto.
+          {hint}
         </p>
       )}
     </form>
